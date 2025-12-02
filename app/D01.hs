@@ -1,13 +1,11 @@
 module Main (main) where
 
+import AoC.Prelude
 import Control.Arrow ((&&&), (>>>))
 import Data.DivMod
 import Data.Functor ((<&>))
 import Data.Mod
 import Text.ParserCombinators.ReadP
-
-unsafeParse :: ReadP a -> String -> a
-unsafeParse p s = head [a | (a, "") <- readP_to_S p s]
 
 parser :: ReadP Int
 parser = l <++ r

@@ -21,6 +21,7 @@ library
   hs-source-dirs:  src
   build-depends:   base ^>=4.20.2.0
   exposed-modules:
+    AoC.Prelude
     Data.DivMod
     Data.Mod
 
