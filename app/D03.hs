@@ -1,42 +1,32 @@
+{-# LANGUAGE ParallelListComp #-}
+
 module Main where
 
 import Control.Arrow ((&&&), (>>>))
-import Data.MemoTrie (memoFix)
-import Data.Nat (Nat (..))
-import Data.Ord
+import Data.Char (digitToInt)
 
-type Digits = [Char]
+type Digit = Int
 
-parse = lines
+parse = map (map digitToInt) . lines
 
-joltages :: Nat -> Digits -> [Digits]
-joltages Z _ = [[]]
-joltages _ [] = []
-joltages (S n) (x : xs) = ((x :) <$> joltages n xs) `mergeDown` joltages (S n) xs
-  where
-    mergeDown = mergeBy (comparing Down)
+-- Elegant solution stolen from Eric Mertens (including usage of
+-- ParallelListComp as a prettier alternative to zipWith)
 
-mergeBy :: (a -> a -> Ordering) -> [a] -> [a] -> [a]
-mergeBy cmp = go
-  where
-    go xs [] = xs
-    go [] ys = ys
-    go (x : xs) (y : ys)
-      | x `cmp` y == LT = x : go xs (y : ys)
-      | otherwise = y : go (x : xs) ys
+maxJoltages :: [Digit] -> [Int]
+maxJoltages = foldl' addDigit (repeat 0)
 
-solve1 = sum . map (read . head . joltages 2)
+addDigit :: [Int] -> Digit -> [Int]
+addDigit prev d =
+  [ max x1 (10 * x0 + d)
+  | x0 <- 0 : prev
+  | x1 <- prev
+  ]
 
-joltages' :: Nat -> Digits -> [Digits]
-joltages' = curry (memoFix f)
-  where
-    f _ (Z, _) = [[]]
-    f _ (_, []) = []
-    f k (S n, x : xs) = ((x :) <$> k (n, xs)) `mergeDown` k (S n, xs)
-      where
-        mergeDown = mergeBy (comparing Down)
+solve k = sum . map ((!! (k - 1)) . maxJoltages)
 
-solve2 = sum . map (read . head . joltages' 12)
+solve1 = solve 2
+
+solve2 = solve 12
 
 main :: IO ()
 main = interact (parse >>> (solve1 &&& solve2) >>> show)

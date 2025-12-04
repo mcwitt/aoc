@@ -27,7 +27,6 @@ library
     AoC.Prelude
     Data.DivMod
     Data.Mod
-    Data.Nat
 
 common solution
   import:
