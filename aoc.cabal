@@ -20,7 +20,9 @@ library
 
   hs-source-dirs:  src
   build-depends:
-    , base      ^>=4.20.2.0
+    , base        ^>=4.20.2.0
+    , comonad
+    , containers
     , MemoTrie
 
   exposed-modules:
@@ -36,6 +38,7 @@ common solution
   build-depends:
     , aoc
     , base        ^>=4.20.2.0
+    , comonad
     , containers
     , MemoTrie
     , mtl
