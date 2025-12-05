@@ -61,3 +61,7 @@ executable d03
 executable d04
   import:  solution
   main-is: D04.hs
+
+executable d05
+  import:  solution
+  main-is: D05.hs
